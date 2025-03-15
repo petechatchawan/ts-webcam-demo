@@ -19,11 +19,12 @@
         "@capacitor/status-bar": "7.0.0",
         "@ionic/angular": "^8.0.0",
         "@tailwindcss/postcss": "^4.0.14",
+        "esbuild": "^0.25.1",
         "ionicons": "^7.0.0",
         "postcss": "^8.5.3",
         "rxjs": "~7.8.0",
         "tailwindcss": "^4.0.14",
-        "ts-webcam": "^1.2.7",
+        "ts-webcam": "^1.2.9",
         "tslib": "^2.3.0",
         "zone.js": "~0.15.0",
       },
@@ -1982,7 +1983,7 @@
 
     "ts-api-utils": ["ts-api-utils@2.0.1", "", { "peerDependencies": { "typescript": ">=4.8.4" } }, "sha512-dnlgjFSVetynI8nzgJ+qF62efpglpWRk8isUEWZGWlJYySCTD6aKvbUDu+zbPeDakk3bg5H4XpitHukgfL1m9w=="],
 
-    "ts-webcam": ["ts-webcam@1.2.7", "", { "dependencies": { "prettier": "^3.5.3" } }, "sha512-+AwmKfkYIgFwMc4mpBejgo6VMa7m04upaPT0iBi08XSnfJpsDfzxvGve9re38kgrCWzbt/ElFkJRsdExUJzhPg=="],
+    "ts-webcam": ["ts-webcam@1.2.9", "", { "dependencies": { "prettier": "^3.5.3" } }, "sha512-bi+ASvxVYbo7su5Kdi74B/Vs4toXphNBo4APwXxRzLckpnL4s9xgr59QqKqu6VQeUTwp8iiXFbvakGD2uMLOqQ=="],
 
     "tsconfig-paths": ["tsconfig-paths@3.15.0", "", { "dependencies": { "@types/json5": "^0.0.29", "json5": "^1.0.2", "minimist": "^1.2.6", "strip-bom": "^3.0.0" } }, "sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg=="],
 
