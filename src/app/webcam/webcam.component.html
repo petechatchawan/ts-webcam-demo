@@ -176,13 +176,13 @@
                                     interface="action-sheet"
                                     aria-label="camera"
                                     placeholder="Select Camera"
-                                    [value]="webcam.getCurrentDevice()?.deviceId"
+                                    [value]="selectedDevice"
                                     (ionChange)="setDevice($event.detail.value)"
                                     label-placement="stacked"
                                     class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white">
                                     <ion-select-option
                                         *ngFor="let device of videoDevices; let i = index"
-                                        [value]="device.deviceId"
+                                        [value]="device"
                                         class="text-gray-900 dark:text-white">
                                         {{ device.label || 'Camera ' + (i + 1) }}
                                     </ion-select-option>
