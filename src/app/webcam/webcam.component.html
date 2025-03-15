@@ -174,11 +174,12 @@
                                 </ion-label>
                                 <ion-select
                                     interface="action-sheet"
+                                    label-placement="stacked"
                                     aria-label="camera"
                                     placeholder="Select Camera"
                                     [value]="selectedDevice"
                                     (ionChange)="setDevice($event.detail.value)"
-                                    label-placement="stacked"
+                                    [disabled]="webcam.getWebcamStatus() === 'initializing'"
                                     class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white">
                                     <ion-select-option
                                         *ngFor="let device of videoDevices; let i = index"
@@ -197,11 +198,12 @@
                                 </ion-label>
                                 <ion-select
                                     interface="action-sheet"
+                                    label-placement="stacked"
                                     aria-label="resolution"
                                     placeholder="Select Resolution"
                                     [value]="webcam.getCurrentResolution()?.key"
                                     (ionChange)="setResolution($event.detail.value)"
-                                    label-placement="stacked"
+                                    [disabled]="webcam.getWebcamStatus() === 'initializing'"
                                     class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white">
                                     <ion-select-option
                                         *ngFor="let resolution of resolutions"
