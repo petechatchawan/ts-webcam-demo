@@ -1,0 +1,7 @@
+{
+  "name": "ts-webcam-demo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
