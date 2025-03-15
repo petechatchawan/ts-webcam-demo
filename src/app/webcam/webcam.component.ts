@@ -125,6 +125,8 @@ export class WebcamComponent implements AfterViewInit {
                 }`,
             );
         });
+
+        this.showMessage('success', `Supported resolutions: ${result.resolutions.length}`);
     }
 
     private async setupWebcam(): Promise<void> {
@@ -149,10 +151,13 @@ export class WebcamComponent implements AfterViewInit {
 
     private async handleOnStart(): Promise<void> {
         if (await this.webcam.previewIsReady()) {
-            this.showMessage('success', 'Video ready');
             // get the current device and resolution
             this.selectedDevice = this.webcam.getCurrentDevice();
             this.selectedResolution = this.webcam.getCurrentResolution();
+            this.showMessage(
+                'success',
+                `Opened camera ${this.selectedDevice?.label} with resolution ${this.selectedResolution?.key} successfully`,
+            );
 
             // update the allowAnyResolution and mirror
             const config = this.webcam.getConfiguration();

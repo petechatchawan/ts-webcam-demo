@@ -1,10 +1,7 @@
 <ion-app>
     <ion-header class="ion-no-border">
         <ion-toolbar color="primary">
-            <ion-title class="text-lg font-medium text-white">
-                <ion-icon name="camera" class="align-middle mr-2"></ion-icon>
-                TS-WEBCAM DEMO
-            </ion-title>
+            <ion-title class="text-lg font-medium text-white px-4"> TS-WEBCAM DEMO </ion-title>
         </ion-toolbar>
     </ion-header>
 
@@ -45,11 +42,10 @@
                                             {{ webcam.getLastError()?.message }}
                                         </p>
                                         <ion-button
-                                            fill="outline"
-                                            color="light"
-                                            size="small"
-                                            class="font-medium">
-                                            Close
+                                            color="medium"
+                                            class="font-medium"
+                                            (click)="webcam.clearError(); selectedResolution=null">
+                                            Try Again
                                         </ion-button>
                                     </div>
                                 </div>
@@ -61,7 +57,8 @@
                                 <div class="flex flex-wrap items-center gap-2">
                                     <!-- Camera Status -->
                                     <ion-badge
-                                        [color]="webcam.isActive() ? 'success' : 'medium'"
+                                        [color]="webcam.isActive() ? 'success' : 'danger'"
+                                        [class.animate-pulse]="webcam.isActive()"
                                         class="flex items-center gap-1">
                                         <ion-icon
                                             [name]="webcam.isActive() ? 'checkmark-circle' : 'close-circle'"
