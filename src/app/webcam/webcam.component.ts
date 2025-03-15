@@ -1,10 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Resolution, Webcam } from 'ts-webcam';
-import { AlertController, ToastController, IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-type MessageType = 'success' | 'warn' | 'error' | 'info';
+import { AlertController, IonicModule, ToastController } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import * as icons from 'ionicons/icons';
+import { Resolution, Webcam } from 'ts-webcam';
 
 @Component({
     selector: 'app-webcam',
@@ -13,7 +13,7 @@ type MessageType = 'success' | 'warn' | 'error' | 'info';
     standalone: true,
     imports: [IonicModule, CommonModule, FormsModule],
 })
-export class WebcamComponent implements OnInit {
+export class WebcamComponent implements AfterViewInit {
     @ViewChild('preview') previewElement!: ElementRef<HTMLVideoElement>;
 
     public readonly webcam = new Webcam();
@@ -43,15 +43,14 @@ export class WebcamComponent implements OnInit {
     constructor(
         private alertController: AlertController,
         private toastController: ToastController,
-    ) {}
-    ngOnInit(): void {
-        throw new Error('Method not implemented.');
+    ) {
+        addIcons({ ...icons });
     }
 
     async ngAfterViewInit(): Promise<void> {
         try {
             const state = await this.webcam.checkCameraPermission();
-            this.showMessage('info', 'Permission state: ' + state);
+            this.showMessage('success', 'Permission state: ' + state);
 
             // Handle permission state
             switch (state) {
@@ -65,7 +64,7 @@ export class WebcamComponent implements OnInit {
                     await this.showPermissionDeniedHelp();
             }
         } catch (error) {
-            this.showMessage('error', 'Failed to initialize camera');
+            this.showMessage('danger', 'Failed to initialize camera');
         }
     }
 
@@ -101,7 +100,7 @@ export class WebcamComponent implements OnInit {
         this.videoDevices = devices;
 
         if (devices.length === 0) {
-            this.showMessage('error', 'No cameras found. Please check your camera connection.');
+            this.showMessage('danger', 'No cameras found. Please check your camera connection.');
             return;
         }
 
@@ -150,7 +149,7 @@ export class WebcamComponent implements OnInit {
 
     private async handleOnStart(): Promise<void> {
         if (await this.webcam.previewIsReady()) {
-            this.showMessage('info', 'Video ready');
+            this.showMessage('success', 'Video ready');
             // get the current device and resolution
             this.selectedDevice = this.webcam.getCurrentDevice();
             this.selectedResolution = this.webcam.getCurrentResolution();
@@ -160,13 +159,13 @@ export class WebcamComponent implements OnInit {
             this.allowAnyResolution = config?.allowAnyResolution || false;
             this.mirror = config?.mirror || false;
         } else {
-            this.showMessage('warn', 'Video not ready. Please wait...');
+            this.showMessage('warning', 'Video not ready. Please wait...');
         }
     }
 
     private handleOnError(error: any): void {
         const message = error?.message || 'Unable to access camera';
-        this.showMessage('error', message);
+        this.showMessage('danger', message);
     }
 
     public async showPermissionExplanation(): Promise<void> {
@@ -200,7 +199,7 @@ export class WebcamComponent implements OnInit {
                 // initialize the camera
                 await this.initializeCamera();
             } else {
-                this.showMessage('error', 'Camera permission denied');
+                this.showMessage('danger', 'Camera permission denied');
             }
         } else {
             await this.initializeCamera();
@@ -224,7 +223,7 @@ export class WebcamComponent implements OnInit {
             this.webcam.clearError();
             this.webcam.updateDevice(device);
         } else {
-            this.showMessage('error', 'Failed to switch camera');
+            this.showMessage('danger', 'Failed to switch camera');
         }
     }
 
@@ -234,7 +233,7 @@ export class WebcamComponent implements OnInit {
             this.webcam.clearError();
             this.webcam.updateResolution(selectedResolution);
         } else {
-            this.showMessage('error', 'Failed to change resolution');
+            this.showMessage('danger', 'Failed to change resolution');
         }
     }
 
@@ -265,10 +264,14 @@ export class WebcamComponent implements OnInit {
         }
     }
 
-    private async showMessage(type: MessageType, detail: string): Promise<void> {
+    private async showMessage(
+        type: 'success' | 'warning' | 'danger',
+        detail: string,
+    ): Promise<void> {
         const toast = await this.toastController.create({
             message: detail,
-            duration: 2000,
+            duration: 1500,
+            position: 'top',
             color: type,
         });
         await toast.present();

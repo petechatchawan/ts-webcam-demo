@@ -37,3 +37,17 @@
 @use '@ionic/angular/css/palettes/dark.system.css';
 
 @use 'tailwindcss';
+
+
+ion-select {
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+}
+
+ion-button {
+  text-transform: none;
+
+  ion-icon {
+    @apply px-2;
+  }
+}

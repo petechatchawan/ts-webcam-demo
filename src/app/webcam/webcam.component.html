@@ -1,205 +1,228 @@
-<ion-header class="ion-no-border">
-    <ion-toolbar color="primary">
-        <ion-title>TS-WEBCAM DEMO</ion-title>
-    </ion-toolbar>
-</ion-header>
+<ion-app>
+    <ion-header class="ion-no-border">
+        <ion-toolbar color="primary">
+            <ion-title class="text-lg font-medium text-white">
+                <ion-icon name="camera" class="align-middle mr-2"></ion-icon>
+                TS-WEBCAM DEMO
+            </ion-title>
+        </ion-toolbar>
+    </ion-header>
 
-<ion-content class="ion-padding">
-    <!-- Main Content -->
-    <div class="flex flex-col lg:flex-row gap-6 overflow-auto">
-        <!-- Left Side: Camera Preview -->
-        <div class="w-full lg:w-2/3">
-            <ng-container *ngIf="!webcam.needsPermissionRequest(); else permissionRequest">
-                <ion-card class="dark:bg-black dark:border-gray-500">
-                    <!-- Camera Preview -->
-                    <div class="relative bg-gray-900 rounded-xl overflow-hidden">
-                        <video
-                            #preview
-                            autoplay
-                            playsinline
-                            [muted]="true"
-                            [style.visibility]="webcam.isActive() && !webcam.getLastError() ? 'visible' : 'hidden'"
-                            class="w-full h-full object-contain"></video>
+    <ion-content class="ion-padding bg-gray-100 dark:bg-gray-900" [scrollY]="true">
+        <!-- Main Content -->
+        <div class="container mx-auto max-w-7xl">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left Side: Camera Preview -->
+                <div class="lg:col-span-2">
+                    <ng-container *ngIf="!webcam.needsPermissionRequest(); else permissionRequest">
+                        <ion-card
+                            class="m-0 overflow-hidden shadow-lg bg-white dark:bg-gray-800 rounded-xl h-auto border dark:border-gray-700">
+                            <!-- Camera Preview -->
+                            <div class="relative aspect-video bg-black rounded-t-xl">
+                                <video
+                                    #preview
+                                    autoplay
+                                    playsinline
+                                    [muted]="true"
+                                    [style.visibility]="webcam.isActive() && !webcam.getLastError() ? 'visible' : 'hidden'"
+                                    class="w-full h-full object-contain"></video>
 
-                        <!-- Loading Spinner -->
-                        <div
-                            *ngIf="webcam.getWebcamStatus() === 'initializing'"
-                            class="absolute inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center">
-                            <ion-spinner name="circular" class="text-white scale-150"></ion-spinner>
-                        </div>
+                                <!-- Loading Spinner -->
+                                <div
+                                    *ngIf="webcam.getWebcamStatus() === 'initializing'"
+                                    class="absolute inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center">
+                                    <ion-spinner
+                                        name="circular"
+                                        class="text-white scale-150"></ion-spinner>
+                                </div>
 
-                        <!-- Error Message -->
-                        <div
-                            *ngIf="webcam?.getLastError()"
-                            class="absolute inset-0 backdrop-blur-sm bg-red-500/90 flex items-center justify-center p-6">
-                            <div class="text-center">
-                                <p class="text-white text-lg font-medium mb-4">
-                                    {{ webcam.getLastError()?.message }}
-                                </p>
+                                <!-- Error Message -->
+                                <div
+                                    *ngIf="webcam?.getLastError()"
+                                    class="absolute inset-0 backdrop-blur-sm bg-red-500/90 flex items-center justify-center p-6">
+                                    <div class="text-center">
+                                        <p class="text-white text-lg font-medium mb-4">
+                                            {{ webcam.getLastError()?.message }}
+                                        </p>
+                                        <ion-button
+                                            fill="outline"
+                                            color="light"
+                                            size="small"
+                                            class="font-medium">
+                                            Close
+                                        </ion-button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Camera Controls -->
+                            <div
+                                class="flex flex-wrap justify-center gap-4 p-4 bg-white dark:bg-gray-800">
                                 <ion-button
-                                    color="light"
-                                    class="font-medium"
-                                    (click)="webcam.clearError()">
-                                    ปิด
+                                    *ngIf="!webcam.isActive()"
+                                    (click)="webcam.start()"
+                                    color="primary"
+                                    class="w-full sm:w-auto min-w-[160px]">
+                                    <ion-icon name="play-outline"></ion-icon>
+                                    Start Camera
+                                </ion-button>
+
+                                <ion-button
+                                    *ngIf="webcam.isActive()"
+                                    (click)="captureImage()"
+                                    color="primary"
+                                    class="w-full sm:w-auto min-w-[160px]">
+                                    <ion-icon name="camera-outline" slot="start"></ion-icon>
+                                    Capture
+                                </ion-button>
+
+                                <ion-button
+                                    [disabled]="!webcam.isActive()"
+                                    (click)="webcam.stop()"
+                                    color="danger"
+                                    class="w-full sm:w-auto min-w-[160px]">
+                                    <ion-icon name="stop-outline" slot="start"></ion-icon>
+                                    Stop Camera
                                 </ion-button>
                             </div>
-                        </div>
-                    </div>
+                        </ion-card>
+                    </ng-container>
 
-                    <!-- Camera Controls -->
-                    <div class="flex justify-center gap-3 my-4">
-                        <ion-button
-                            *ngIf="!webcam.isActive()"
-                            (click)="webcam.start()"
-                            color="primary"
-                            class="w-full max-w-[200px]">
-                            <ion-icon name="play-outline" slot="start"></ion-icon>
-                            เปิดกล้อง
-                        </ion-button>
+                    <ng-template #permissionRequest>
+                        <ion-card
+                            class="m-0 shadow-lg bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700">
+                            <div class="p-6 text-center">
+                                <ion-icon
+                                    name="alert-circle"
+                                    color="danger"
+                                    class="text-6xl mb-4"></ion-icon>
+                                <h2
+                                    class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+                                    Permission Required
+                                </h2>
+                                <p class="text-gray-600 dark:text-gray-300 mb-6">
+                                    Please allow camera access to use this feature
+                                </p>
+                                <ion-button
+                                    color="primary"
+                                    (click)="handlePermissionDialogConfirm()">
+                                    <ion-icon name="checkmark" slot="start"></ion-icon>
+                                    Allow
+                                </ion-button>
+                            </div>
+                        </ion-card>
+                    </ng-template>
+                </div>
 
-                        <ion-button
-                            *ngIf="webcam.isActive()"
-                            (click)="captureImage()"
-                            color="primary"
-                            class="w-full max-w-[200px]">
-                            <ion-icon name="camera-outline" slot="start"></ion-icon>
-                            ถ่ายภาพ
-                        </ion-button>
+                <!-- Right Side: Settings -->
+                <div class="lg:col-span-1">
+                    <ion-card
+                        class="m-0 shadow-lg bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700 lg:sticky lg:top-4">
+                        <ion-card-header class="border-b border-gray-200 dark:border-gray-700">
+                            <ion-card-title
+                                class="flex items-center gap-2 text-lg p-4 text-gray-900 dark:text-white">
+                                <ion-icon
+                                    name="settings"
+                                    class="text-gray-500 dark:text-gray-400"></ion-icon>
+                                Camera Settings
+                            </ion-card-title>
+                        </ion-card-header>
 
-                        <ion-button
-                            [disabled]="!webcam.isActive()"
-                            (click)="webcam.stop()"
-                            color="danger"
-                            class="w-full max-w-[200px]">
-                            <ion-icon name="stop-outline" slot="start"></ion-icon>
-                            ปิดกล้อง
-                        </ion-button>
-                    </div>
-                </ion-card>
-            </ng-container>
+                        <ion-card-content
+                            class="p-4 space-y-4 lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto">
+                            <!-- Camera Device Selection -->
+                            <div class="space-y-2 mt-4">
+                                <ion-label
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Select Camera
+                                </ion-label>
+                                <ion-select
+                                    interface="action-sheet"
+                                    aria-label="camera"
+                                    placeholder="Select Camera"
+                                    [value]="webcam.getCurrentDevice()?.deviceId"
+                                    (ionChange)="setDevice($event.detail.value)"
+                                    label-placement="stacked"
+                                    class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white">
+                                    <ion-select-option
+                                        *ngFor="let device of videoDevices; let i = index"
+                                        [value]="device.deviceId"
+                                        class="text-gray-900 dark:text-white">
+                                        {{ device.label || 'Camera ' + (i + 1) }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </div>
 
-            <ng-template #permissionRequest>
-                <ion-card class="dark:bg-black dark:border-gray-500">
-                    <ion-card-header>
-                        <ion-card-title color="danger">
-                            <ion-icon name="alert-circle" color="danger"></ion-icon>
-                            Permission Required
-                        </ion-card-title>
-                    </ion-card-header>
-                    <ion-card-content>
-                        <p class="text-base text-gray-700 dark:text-gray-300 mb-4">
-                            Camera access permission is required to take photos
-                        </p>
-                        <ion-button
-                            color="primary"
-                            size="small"
-                            (click)="handlePermissionDialogConfirm()">
-                            Allow
-                        </ion-button>
-                    </ion-card-content>
-                </ion-card>
-            </ng-template>
+                            <!-- Resolution -->
+                            <div class="space-y-2">
+                                <ion-label
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Resolution
+                                </ion-label>
+                                <ion-select
+                                    interface="action-sheet"
+                                    aria-label="resolution"
+                                    placeholder="Select Resolution"
+                                    [value]="webcam.getCurrentResolution()?.key"
+                                    (ionChange)="setResolution($event.detail.value)"
+                                    label-placement="stacked"
+                                    class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white">
+                                    <ion-select-option
+                                        *ngFor="let resolution of resolutions"
+                                        [value]="resolution.key"
+                                        class="text-gray-900 dark:text-white">
+                                        {{ resolution.key }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </div>
+
+                            <!-- Advanced Settings -->
+                            <div
+                                class="pt-4 space-y-4 border-t border-gray-200 dark:border-gray-700">
+                                <h4 class="text-sm font-medium text-gray-900 dark:text-white">
+                                    Advanced Settings
+                                </h4>
+
+                                <div class="space-y-2 mt-4">
+                                    <!-- Allow Any Resolution -->
+                                    <div
+                                        class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                        <ion-label class="text-sm text-gray-700 dark:text-gray-300">
+                                            Allow Any Resolution
+                                        </ion-label>
+                                        <ion-toggle
+                                            [(ngModel)]="allowAnyResolution"
+                                            (ionChange)="toggleAllowAnyResolution()">
+                                        </ion-toggle>
+                                    </div>
+
+                                    <!-- Mirror -->
+                                    <div
+                                        class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                        <ion-label class="text-sm text-gray-700 dark:text-gray-300">
+                                            Mirror Video
+                                        </ion-label>
+                                        <ion-toggle
+                                            [(ngModel)]="mirror"
+                                            (ionChange)="toggleMirror()">
+                                        </ion-toggle>
+                                    </div>
+
+                                    <!-- Audio -->
+                                    <div
+                                        class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                        <ion-label class="text-sm text-gray-700 dark:text-gray-300">
+                                            Enable Audio
+                                        </ion-label>
+                                        <ion-toggle [(ngModel)]="audio" (ionChange)="toggleAudio()">
+                                        </ion-toggle>
+                                    </div>
+                                </div>
+                            </div>
+                        </ion-card-content>
+                    </ion-card>
+                </div>
+            </div>
         </div>
-
-        <!-- Right Side: Settings -->
-        <div class="w-full lg:w-1/3">
-            <ion-card class="dark:bg-black dark:border-gray-500">
-                <ion-card-header>
-                    <ion-card-title>
-                        <ion-icon name="cog" color="medium"></ion-icon>
-                        Camera Settings
-                    </ion-card-title>
-                </ion-card-header>
-
-                <ion-card-content class="space-y-6">
-                    <!-- Camera Device Selection -->
-                    <div class="space-y-2">
-                        <ion-label
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Select Camera
-                        </ion-label>
-
-                        <ion-select
-                            interface="action-sheet"
-                            aria-label="camera"
-                            placeholder="เลือกกล้อง"
-                            [value]="webcam.getCurrentDevice()?.deviceId"
-                            (ionChange)="setDevice($event.detail.value)"
-                            class="w-full bg-white rounded-md border border-gray-200 text-sm text-gray-900">
-                            <ion-select-option
-                                *ngFor="let device of videoDevices; let i = index"
-                                [value]="device.deviceId"
-                                class="text-sm text-gray-900">
-                                {{ device.label || 'กล้อง ' + (i + 1) }}
-                            </ion-select-option>
-                        </ion-select>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">
-                            * You can change camera at any time
-                        </p>
-                    </div>
-
-                    <!-- Resolution -->
-                    <div class="space-y-2">
-                        <ion-label
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Resolution
-                        </ion-label>
-                        <ion-select
-                            interface="action-sheet"
-                            aria-label="resolution"
-                            placeholder="เลือกความละเอียด"
-                            [value]="webcam.getCurrentResolution()?.key"
-                            (ionChange)="setResolution($event.detail.value)"
-                            class="w-full bg-white rounded-md border border-gray-200 text-sm text-gray-900">
-                            <ion-select-option
-                                *ngFor="let resolution of resolutions"
-                                [value]="resolution.key"
-                                class="text-sm text-gray-900">
-                                {{ resolution.key }}
-                            </ion-select-option>
-                        </ion-select>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">
-                            * You can change resolution at any time
-                        </p>
-                    </div>
-
-                    <!-- Advanced Settings -->
-                    <div class="space-y-4 pt-4 border-t dark:border-gray-500">
-                        <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Advanced Settings
-                        </h4>
-
-                        <!-- Allow Any Resolution -->
-                        <div class="flex items-center justify-between">
-                            <ion-label class="text-sm text-gray-600 dark:text-gray-400">
-                                Allow Any Resolution
-                            </ion-label>
-                            <ion-toggle
-                                [(ngModel)]="allowAnyResolution"
-                                (ionChange)="toggleAllowAnyResolution()">
-                            </ion-toggle>
-                        </div>
-
-                        <!-- Mirror -->
-                        <div class="flex items-center justify-between">
-                            <ion-label class="text-sm text-gray-600 dark:text-gray-400">
-                                Mirror Video
-                            </ion-label>
-                            <ion-toggle [(ngModel)]="mirror" (ionChange)="toggleMirror()">
-                            </ion-toggle>
-                        </div>
-
-                        <!-- Audio -->
-                        <div class="flex items-center justify-between">
-                            <ion-label class="text-sm text-gray-600 dark:text-gray-400">
-                                Enable Audio
-                            </ion-label>
-                            <ion-toggle [(ngModel)]="audio" (ionChange)="toggleAudio()">
-                            </ion-toggle>
-                        </div>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-        </div>
-    </div>
-</ion-content>
+    </ion-content>
+</ion-app>
