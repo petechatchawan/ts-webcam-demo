@@ -113,6 +113,16 @@
                                 </ion-button>
 
                                 <ion-button
+                                    *ngIf="webcam.isActive()"
+                                    [disabled]="!webcam.isTorchSupported()"
+                                    (click)="toggleTorch()"
+                                    color="primary"
+                                    class="w-full sm:w-auto min-w-[160px]">
+                                    <ion-icon name="camera-outline" slot="start"></ion-icon>
+                                    {{ webcam.isTorchActive() ? 'Torch On' : 'Torch Off' }}
+                                </ion-button>
+
+                                <ion-button
                                     [disabled]="!webcam.isActive()"
                                     (click)="webcam.stop()"
                                     color="danger"

@@ -17,14 +17,14 @@
         "@capacitor/haptics": "7.0.0",
         "@capacitor/keyboard": "7.0.0",
         "@capacitor/status-bar": "7.0.0",
-        "@ionic/angular": "^8.0.0",
+        "@ionic/angular": "^7.0.0",
         "@tailwindcss/postcss": "^4.0.14",
         "esbuild": "^0.25.1",
         "ionicons": "^7.0.0",
         "postcss": "^8.5.3",
         "rxjs": "~7.8.0",
         "tailwindcss": "^4.0.14",
-        "ts-webcam": "^1.2.9",
+        "ts-webcam": "^1.3.0",
         "tslib": "^2.3.0",
         "zone.js": "~0.15.0",
       },
@@ -43,6 +43,7 @@
         "@types/jasmine": "~5.1.0",
         "@typescript-eslint/eslint-plugin": "^8.18.0",
         "@typescript-eslint/parser": "^8.18.0",
+        "autoprefixer": "^10.0.0",
         "eslint": "^9.16.0",
         "eslint-plugin-import": "^2.29.1",
         "eslint-plugin-jsdoc": "^48.2.1",
@@ -413,13 +414,13 @@
 
     "@inquirer/type": ["@inquirer/type@1.5.5", "", { "dependencies": { "mute-stream": "^1.0.0" } }, "sha512-MzICLu4yS7V8AA61sANROZ9vT1H3ooca5dSmI1FjZkzq7o/koMsRfQSzRtFo+F3Ao4Sf1C0bpLKejpKB/+j6MA=="],
 
-    "@ionic/angular": ["@ionic/angular@8.5.0", "", { "dependencies": { "@ionic/core": "8.5.0", "ionicons": "^7.0.0", "jsonc-parser": "^3.0.0", "tslib": "^2.3.0" }, "peerDependencies": { "@angular/core": ">=16.0.0", "@angular/forms": ">=16.0.0", "@angular/router": ">=16.0.0", "rxjs": ">=7.5.0", "zone.js": ">=0.13.0" } }, "sha512-Zzgdj9mai3bLTu8ER5MH8wVJmu1rKnzQquaK5KoKcQK/WcB5VFD98meGpI77k1eXY19vN0r/7sc5Q7sWWvPcRQ=="],
+    "@ionic/angular": ["@ionic/angular@7.8.6", "", { "dependencies": { "@ionic/core": "7.8.6", "ionicons": "^7.0.0", "jsonc-parser": "^3.0.0", "tslib": "^2.3.0" }, "peerDependencies": { "@angular/core": ">=14.0.0", "@angular/forms": ">=14.0.0", "@angular/router": ">=14.0.0", "rxjs": ">=7.5.0", "zone.js": ">=0.11.0" } }, "sha512-3Qe53hXpyjtx6fFcxt/NTAlauIawsGmCZJPauV5sAnSKVuX8C82C1zMAZTeJt6m2dnd71wythc98BXUXsx/UxQ=="],
 
     "@ionic/angular-toolkit": ["@ionic/angular-toolkit@12.1.1", "", { "dependencies": { "@angular-devkit/core": "^18.0.0", "@angular-devkit/schematics": "^18.0.0", "@schematics/angular": "^18.0.0" } }, "sha512-VgD9pUg2ViI6a0W+8iUs7sGrQ8/1BQH43/ioAqGu/WWsgcnevy9ddTZp0M1MHbeVWaoauwbmNsG/lgNNEZq1hw=="],
 
     "@ionic/cli-framework-output": ["@ionic/cli-framework-output@2.2.8", "", { "dependencies": { "@ionic/utils-terminal": "2.3.5", "debug": "^4.0.0", "tslib": "^2.0.1" } }, "sha512-TshtaFQsovB4NWRBydbNFawql6yul7d5bMiW1WYYf17hd99V6xdDdk3vtF51bw6sLkxON3bDQpWsnUc9/hVo3g=="],
 
-    "@ionic/core": ["@ionic/core@8.5.0", "", { "dependencies": { "@stencil/core": "4.20.0", "ionicons": "^7.2.2", "tslib": "^2.1.0" } }, "sha512-4U6I3hGWhHu9YUL5NzwjT6zbcSABTKBMfGRwHw5F3bUsV23w18s4Oku+WZ3aIVhtnMugR0vhYiR1dh94RAKycw=="],
+    "@ionic/core": ["@ionic/core@7.8.6", "", { "dependencies": { "@stencil/core": "^4.12.2", "ionicons": "^7.2.2", "tslib": "^2.1.0" } }, "sha512-HAYZdEmeJgOdo2kDlZkcCGHb+zs/vjU6iv4skbVBL7y+OnSv/oC2u83Yee8S3/aY0YAxkyBgu7hLTYH13Zc2Aw=="],
 
     "@ionic/utils-array": ["@ionic/utils-array@2.1.6", "", { "dependencies": { "debug": "^4.0.0", "tslib": "^2.0.1" } }, "sha512-0JZ1Zkp3wURnv8oq6Qt7fMPo5MpjbLoUoa9Bu2Q4PJuSDWM8H8gwF3dQO7VTeUj3/0o1IB1wGkFWZZYgUXZMUg=="],
 
@@ -1983,7 +1984,7 @@
 
     "ts-api-utils": ["ts-api-utils@2.0.1", "", { "peerDependencies": { "typescript": ">=4.8.4" } }, "sha512-dnlgjFSVetynI8nzgJ+qF62efpglpWRk8isUEWZGWlJYySCTD6aKvbUDu+zbPeDakk3bg5H4XpitHukgfL1m9w=="],
 
-    "ts-webcam": ["ts-webcam@1.2.9", "", { "dependencies": { "prettier": "^3.5.3" } }, "sha512-bi+ASvxVYbo7su5Kdi74B/Vs4toXphNBo4APwXxRzLckpnL4s9xgr59QqKqu6VQeUTwp8iiXFbvakGD2uMLOqQ=="],
+    "ts-webcam": ["ts-webcam@1.3.0", "", { "dependencies": { "prettier": "^3.5.3" } }, "sha512-NnxJR7Kb7IjtavJFLdIwmzsHYSb3eXzDrkD5yQX+k4XH/5nGpoCSWzl211iQjDciW5DL3GuMfbQz1zqr8nPqLQ=="],
 
     "tsconfig-paths": ["tsconfig-paths@3.15.0", "", { "dependencies": { "@types/json5": "^0.0.29", "json5": "^1.0.2", "minimist": "^1.2.6", "strip-bom": "^3.0.0" } }, "sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg=="],
 
@@ -2108,6 +2109,8 @@
     "y18n": ["y18n@5.0.8", "", {}, "sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA=="],
 
     "yallist": ["yallist@4.0.0", "", {}, "sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A=="],
+
+    "yaml": ["yaml@2.7.0", "", { "bin": { "yaml": "bin.mjs" } }, "sha512-+hSoy/QHluxmC9kCIJyL/uyFmLmc+e5CFR5Wa+bpIhIj85LVb9ZH2nVnqrHoSvKogwODv0ClqZkmiSSaIH5LTA=="],
 
     "yargs": ["yargs@17.7.2", "", { "dependencies": { "cliui": "^8.0.1", "escalade": "^3.1.1", "get-caller-file": "^2.0.5", "require-directory": "^2.1.1", "string-width": "^4.2.3", "y18n": "^5.0.5", "yargs-parser": "^21.1.1" } }, "sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w=="],
 
@@ -2240,6 +2243,8 @@
     "@parcel/watcher/node-addon-api": ["node-addon-api@7.1.1", "", {}, "sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ=="],
 
     "@tailwindcss/node/jiti": ["jiti@2.4.2", "", { "bin": { "jiti": "lib/jiti-cli.mjs" } }, "sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A=="],
+
+    "@tailwindcss/postcss/tailwindcss": ["tailwindcss@4.0.14", "", {}, "sha512-92YT2dpt671tFiHH/e1ok9D987N9fHD5VWoly1CdPD/Cd1HMglvZwP3nx2yTj2lbXDAHt8QssZkxTLCCTNL+xw=="],
 
     "@tufjs/models/minimatch": ["minimatch@9.0.5", "", { "dependencies": { "brace-expansion": "^2.0.1" } }, "sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow=="],
 
@@ -2424,6 +2429,8 @@
     "path-scurry/lru-cache": ["lru-cache@11.0.2", "", {}, "sha512-123qHRfJBmo2jXDbo/a5YOQrJoHF/GNQTLzQ5+IdK5pWpceK17yRc6ozlWd25FxvGKQbIUs91fDFkXmDHTKcyA=="],
 
     "pkg-dir/find-up": ["find-up@6.3.0", "", { "dependencies": { "locate-path": "^7.1.0", "path-exists": "^5.0.0" } }, "sha512-v2ZsoEuVHYy8ZIlYqwPe/39Cy+cFDzp4dXPaxNvkEuouymu+2Jbz0PxpKarJHYJTmv2HWT3O382qY8l4jMWthw=="],
+
+    "postcss-modules-scope/postcss-selector-parser": ["postcss-selector-parser@7.1.0", "", { "dependencies": { "cssesc": "^3.0.0", "util-deprecate": "^1.0.2" } }, "sha512-8sLjZwK0R+JlxlYcTuVnyT2v+htpdrjDOKuMcOVdYjt52Lh8hWRYpxBPoKx/Zg+bcjc3wx6fmQevMmUztS/ccA=="],
 
     "promise-retry/retry": ["retry@0.12.0", "", {}, "sha512-9LkiTwjUh6rT555DtE9rTX+BKByPfrMzEAtnlEtdEwr3Nkffwiihqe2bWADg+OQRjt9gl6ICdmB/ZFDCGAtSow=="],
 
