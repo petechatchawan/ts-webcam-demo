@@ -57,6 +57,45 @@
 
                             <!-- Camera Controls -->
                             <div
+                                class="px-4 py-2 bg-white dark:bg-gray-800 border-t dark:border-gray-700">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <!-- Camera Status -->
+                                    <ion-badge
+                                        [color]="webcam.isActive() ? 'success' : 'medium'"
+                                        class="flex items-center gap-1">
+                                        <ion-icon
+                                            [name]="webcam.isActive() ? 'checkmark-circle' : 'close-circle'"
+                                            class="text-sm"></ion-icon>
+                                        {{ webcam.isActive() ? 'Active' : 'Inactive' }}
+                                    </ion-badge>
+
+                                    <!-- Torch Support -->
+                                    <ion-badge
+                                        [color]="webcam.isTorchSupported() ? 'primary' : 'medium'"
+                                        class="flex items-center gap-1">
+                                        <ion-icon name="flash" class="text-sm"></ion-icon>
+                                        {{ webcam.isTorchSupported() ? 'Flash Available' : 'No Flash' }}
+                                    </ion-badge>
+
+                                    <!-- Zoom Support -->
+                                    <ion-badge
+                                        [color]="webcam.isZoomSupported() ? 'primary' : 'medium'"
+                                        class="flex items-center gap-1">
+                                        <ion-icon name="scan" class="text-sm"></ion-icon>
+                                        {{ webcam.isZoomSupported() ? 'Zoom Available' : 'No Zoom' }}
+                                    </ion-badge>
+
+                                    <!-- Focus Mode Support -->
+                                    <ion-badge
+                                        [color]="webcam.isFocusSupported() ? 'primary' : 'medium'"
+                                        class="flex items-center gap-1">
+                                        <ion-icon name="eye" class="text-sm"></ion-icon>
+                                        {{ webcam.isFocusSupported() ? 'Auto Focus' : 'Fixed Focus' }}
+                                    </ion-badge>
+                                </div>
+                            </div>
+
+                            <div
                                 class="flex flex-wrap justify-center gap-4 p-4 bg-white dark:bg-gray-800">
                                 <ion-button
                                     *ngIf="!webcam.isActive()"
