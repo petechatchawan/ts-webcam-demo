@@ -174,8 +174,7 @@
                             </ion-card-title>
                         </ion-card-header>
 
-                        <ion-card-content
-                            class="p-4 space-y-4 lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto">
+                        <ion-card-content class="p-4 space-y-4  lg:overflow-y-auto">
                             <!-- Camera Device Selection -->
                             <div class="space-y-2 mt-4">
                                 <ion-label
@@ -183,7 +182,7 @@
                                     Select Camera
                                 </ion-label>
                                 <ion-select
-                                    interface="action-sheet"
+                                    interface="popover"
                                     label-placement="stacked"
                                     aria-label="camera"
                                     placeholder="Select Camera"
@@ -206,8 +205,13 @@
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Resolution
                                 </ion-label>
+                                <p
+                                    *ngIf="webcam.isAutoRotationEnabled()"
+                                    class="text-sm text-gray-700 dark:text-gray-300">
+                                    resolution key: {{ webcam.getCurrentResolution()?.key }}
+                                </p>
                                 <ion-select
-                                    interface="action-sheet"
+                                    interface="popover"
                                     label-placement="stacked"
                                     aria-label="resolution"
                                     placeholder="Select Resolution"
@@ -216,7 +220,7 @@
                                     [disabled]="webcam.getWebcamStatus() === 'initializing'"
                                     class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white">
                                     <ion-select-option
-                                        *ngFor="let resolution of resolutions"
+                                        *ngFor="let resolution of webcam.getResolutions()"
                                         [value]="resolution.key"
                                         class="text-gray-900 dark:text-white">
                                         {{ resolution.key }}
@@ -244,6 +248,18 @@
                                         </ion-toggle>
                                     </div>
 
+                                    <!-- Auto Rotation -->
+                                    <div
+                                        class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                        <ion-label class="text-sm text-gray-700 dark:text-gray-300">
+                                            Auto Rotation
+                                        </ion-label>
+                                        <ion-toggle
+                                            [(ngModel)]="isAutoRotationEnabled"
+                                            (ionChange)="toggleAutoRotation()">
+                                        </ion-toggle>
+                                    </div>
+
                                     <!-- Mirror -->
                                     <div
                                         class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50">
@@ -251,7 +267,7 @@
                                             Mirror Video
                                         </ion-label>
                                         <ion-toggle
-                                            [(ngModel)]="mirror"
+                                            [(ngModel)]="isMirrorEnabled"
                                             (ionChange)="toggleMirror()">
                                         </ion-toggle>
                                     </div>
@@ -262,7 +278,9 @@
                                         <ion-label class="text-sm text-gray-700 dark:text-gray-300">
                                             Enable Audio
                                         </ion-label>
-                                        <ion-toggle [(ngModel)]="audio" (ionChange)="toggleAudio()">
+                                        <ion-toggle
+                                            [(ngModel)]="isAudioEnabled"
+                                            (ionChange)="toggleAudio()">
                                         </ion-toggle>
                                     </div>
                                 </div>

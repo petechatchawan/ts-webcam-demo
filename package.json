@@ -34,7 +34,7 @@
     "postcss": "^8.5.3",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.0.14",
-    "ts-webcam": "^1.3.0",
+    "ts-webcam": "^1.3.2",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

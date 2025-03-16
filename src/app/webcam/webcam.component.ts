@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AlertController, IonicModule, ToastController } from '@ionic/angular';
+import { AlertController, IonicModule, LoadingController, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import * as icons from 'ionicons/icons';
 import { Resolution, Webcam } from 'ts-webcam';
@@ -17,54 +17,50 @@ export class WebcamComponent implements AfterViewInit {
     @ViewChild('preview') previewElement!: ElementRef<HTMLVideoElement>;
 
     public readonly webcam = new Webcam();
-    public readonly resolutions: Resolution[] = [
-        this.webcam.createResolution(4096, 2160),
-        this.webcam.createResolution(2560, 1440),
-        this.webcam.createResolution(1920, 1080),
-        this.webcam.createResolution(1280, 720),
-        this.webcam.createResolution(640, 480),
-        this.webcam.createResolution(640, 360),
-        this.webcam.createResolution(1920, 1920),
-        this.webcam.createResolution(1080, 1080),
-        this.webcam.createResolution(720, 720),
-        this.webcam.createResolution(480, 480),
-        this.webcam.createResolution(360, 360),
-    ];
-
     public videoDevices: MediaDeviceInfo[] = [];
     public selectedDevice: MediaDeviceInfo | null = null;
     public selectedResolution: Resolution | null = null;
-    public showPermissionDialog: boolean = false;
-    public showDeniedDialog: boolean = false;
     public allowAnyResolution: boolean = false;
-    public mirror: boolean = false;
-    public audio: boolean = false;
+    public isMirrorEnabled: boolean = false;
+    public isAutoRotationEnabled: boolean = false;
+    public isAudioEnabled: boolean = false;
 
     constructor(
         private alertController: AlertController,
         private toastController: ToastController,
+        private loadingController: LoadingController,
     ) {
         addIcons({ ...icons });
     }
 
     async ngAfterViewInit(): Promise<void> {
         try {
-            const state = await this.webcam.checkCameraPermission();
-            this.showMessage('success', 'Permission state: ' + state);
-
-            // Handle permission state
-            switch (state) {
-                case 'granted':
-                    await this.initializeCamera();
-                    break;
-                case 'prompt':
-                    await this.showPermissionExplanation();
-                    break;
-                default:
-                    await this.showPermissionDeniedHelp();
-            }
+            await this.requestCameraPermission();
         } catch (error) {
-            this.showMessage('danger', 'Failed to initialize camera');
+            await this.showMessage('danger', 'Failed to initialize camera');
+        }
+    }
+
+    private async requestCameraPermission(): Promise<void> {
+        const state = await this.webcam.checkCameraPermission();
+        await this.showMessage('success', 'Permission state: ' + state);
+
+        switch (state) {
+            case 'granted':
+                // initialize the resolutions to use in ion-select and can reuse it
+                this.initializeResolutions();
+
+                // check device capabilities
+                await this.checkDeviceCapabilities();
+
+                // initialize the webcam
+                await this.initializeWebcam();
+                break;
+            case 'prompt':
+                await this.showPermissionExplanation();
+                break;
+            default:
+                await this.showPermissionDeniedHelp();
         }
     }
 
@@ -85,7 +81,7 @@ export class WebcamComponent implements AfterViewInit {
                 {
                     text: 'Okay',
                     handler: async () => {
-                        await this.initializeCamera();
+                        await this.initializeWebcam();
                     },
                 },
             ],
@@ -95,50 +91,55 @@ export class WebcamComponent implements AfterViewInit {
         await alert.present();
     }
 
-    private async initializeCamera(): Promise<void> {
+    initializeResolutions(): void {
+        this.webcam.setResolutions([
+            // NORMAL RESOLUTIONS
+            this.webcam.createResolution(4096, 2160),
+            this.webcam.createResolution(2560, 1440),
+            this.webcam.createResolution(1920, 1080),
+            this.webcam.createResolution(1280, 720),
+            this.webcam.createResolution(640, 480),
+            this.webcam.createResolution(640, 360),
+
+            // SQUARE RESOLUTIONS
+            this.webcam.createResolution(1920, 1920),
+            this.webcam.createResolution(1080, 1080),
+            this.webcam.createResolution(720, 720),
+            this.webcam.createResolution(480, 480),
+            this.webcam.createResolution(360, 360),
+        ]);
+    }
+
+    private async initializeWebcam(): Promise<void> {
         const devices = await this.webcam.getVideoDevices();
         this.videoDevices = devices;
 
         if (devices.length === 0) {
-            this.showMessage('danger', 'No cameras found. Please check your camera connection.');
+            await this.showMessage(
+                'danger',
+                'No cameras found. Please check your camera connection.',
+            );
             return;
         }
 
         this.selectedDevice = devices[0];
-        await this.checkDeviceCapabilities();
-        await this.setupWebcam();
-    }
+        if (!this.selectedDevice) return;
 
-    private async checkDeviceCapabilities(): Promise<void> {
-        const devices = await this.webcam.getVideoDevices();
-        const deviceCapabilities = [];
-        for (const device of devices) {
-            const capability = await this.webcam.checkDevicesCapabilitiesData(device.deviceId);
-            deviceCapabilities.push(capability);
-        }
-
-        const result = this.webcam.checkSupportedResolutions(deviceCapabilities, this.resolutions);
-        result.resolutions.forEach((res: any) => {
-            console.log(
-                `${res.name} (${res.width}x${res.height}): ${
-                    res.supported ? 'Supported' : 'Not supported'
-                }`,
-            );
-        });
-
-        this.showMessage('success', `Supported resolutions: ${result.resolutions.length}`);
-    }
-
-    private async setupWebcam(): Promise<void> {
-        const device = this.selectedDevice;
-        if (!device) return;
+        const resolutions = [
+            this.webcam.createResolution(1920, 1920),
+            this.webcam.createResolution(1080, 1080),
+            this.webcam.createResolution(720, 720),
+            this.webcam.createResolution(480, 480),
+            this.webcam.createResolution(360, 360),
+        ];
 
         // setup the webcam
         this.webcam.setupConfiguration({
-            audio: false,
-            device: device,
-            mirror: this.mirror,
-            autoRotation: false,
+            audio: this.isAudioEnabled,
+            device: this.selectedDevice,
+            mirror: this.isMirrorEnabled,
+            resolution: resolutions,
+            autoRotation: this.isAutoRotationEnabled,
             allowAnyResolution: this.allowAnyResolution,
             previewElement: this.previewElement.nativeElement,
             onStart: async () => await this.handleOnStart(),
@@ -149,12 +150,47 @@ export class WebcamComponent implements AfterViewInit {
         await this.webcam.start();
     }
 
+    private async checkDeviceCapabilities(): Promise<void> {
+        try {
+            await this.showLoading('Checking device capabilities...');
+            const devices = await this.webcam.getVideoDevices();
+            const deviceCapabilities = [];
+            for (const device of devices) {
+                const capability = await this.webcam.checkDevicesCapabilitiesData(device.deviceId);
+                console.log('capability', capability);
+
+                deviceCapabilities.push(capability);
+            }
+
+            const result = this.webcam.checkSupportedResolutions(
+                deviceCapabilities,
+                this.webcam.getResolutions(),
+            );
+            console.log('result', result);
+
+            result.resolutions.forEach((res: any) => {
+                console.log(
+                    `${res.name} (${res.width}x${res.height}): ${
+                        res.supported ? 'Supported' : 'Not supported'
+                    }`,
+                );
+            });
+
+            await this.showMessage(
+                'success',
+                `Supported resolutions: ${result.resolutions.length}`,
+            );
+        } finally {
+            await this.dismissLoading();
+        }
+    }
+
     private async handleOnStart(): Promise<void> {
         if (await this.webcam.previewIsReady()) {
             // get the current device and resolution
             this.selectedDevice = this.webcam.getCurrentDevice();
             this.selectedResolution = this.webcam.getCurrentResolution();
-            this.showMessage(
+            await this.showMessage(
                 'success',
                 `Opened camera ${this.selectedDevice?.label} with resolution ${this.selectedResolution?.key} successfully`,
             );
@@ -162,15 +198,15 @@ export class WebcamComponent implements AfterViewInit {
             // update the allowAnyResolution and mirror
             const config = this.webcam.getConfiguration();
             this.allowAnyResolution = config?.allowAnyResolution || false;
-            this.mirror = config?.mirror || false;
+            this.isMirrorEnabled = config?.mirror || false;
         } else {
-            this.showMessage('warning', 'Video not ready. Please wait...');
+            await this.showMessage('warning', 'Video not ready. Please wait...');
         }
     }
 
-    private handleOnError(error: any): void {
+    private async handleOnError(error: any): Promise<void> {
         const message = error?.message || 'Unable to access camera';
-        this.showMessage('danger', message);
+        await this.showMessage('danger', message);
     }
 
     public async showPermissionExplanation(): Promise<void> {
@@ -193,7 +229,6 @@ export class WebcamComponent implements AfterViewInit {
     }
 
     public async handlePermissionDialogConfirm(): Promise<void> {
-        this.showPermissionDialog = false;
         await this.handleRequestPermission();
     }
 
@@ -202,16 +237,16 @@ export class WebcamComponent implements AfterViewInit {
             const permissions = await this.webcam.requestPermissions();
             if (permissions.camera === 'granted') {
                 // initialize the camera
-                await this.initializeCamera();
+                await this.initializeWebcam();
             } else {
-                this.showMessage('danger', 'Camera permission denied');
+                await this.showMessage('danger', 'Camera permission denied');
             }
         } else {
-            await this.initializeCamera();
+            await this.initializeWebcam();
         }
     }
 
-    public captureImage(): void {
+    public async captureImage(): Promise<void> {
         const image = this.webcam.captureImage({
             quality: 0.9,
             mediaType: 'image/jpeg',
@@ -219,26 +254,25 @@ export class WebcamComponent implements AfterViewInit {
         });
 
         // show the image
-        this.showMessage('success', `Image captured: ${image.slice(-10)}`);
+        await this.showMessage('success', `Image captured: ${image.slice(-10)}`);
     }
 
     public async setDevice(device: MediaDeviceInfo): Promise<void> {
-        console.log('Selected device:', device);
         if (device) {
             this.webcam.clearError();
             this.webcam.updateDevice(device);
         } else {
-            this.showMessage('danger', 'Failed to switch camera');
+            await this.showMessage('danger', 'Failed to switch camera');
         }
     }
 
-    public setResolution(key: string): void {
-        const selectedResolution = this.resolutions.find((r) => r.key === key);
+    public async setResolution(key: string): Promise<void> {
+        const selectedResolution = this.webcam.getResolutions().find((r) => r.key === key);
         if (selectedResolution) {
             this.webcam.clearError();
             this.webcam.updateResolution(selectedResolution);
         } else {
-            this.showMessage('danger', 'Failed to change resolution');
+            await this.showMessage('danger', 'Failed to change resolution');
         }
     }
 
@@ -251,15 +285,22 @@ export class WebcamComponent implements AfterViewInit {
 
     public toggleMirror(): void {
         if (this.webcam.isActive()) {
-            this.webcam.toggle('mirror');
-            this.mirror = this.webcam.isMirror() || false;
+            this.webcam.toggleMirror();
+            this.isMirrorEnabled = this.webcam.isMirrorEnabled() || false;
         }
     }
 
     public toggleAudio(): void {
         if (this.webcam.isActive()) {
             this.webcam.toggle('audio');
-            this.audio = this.webcam.isAudioEnabled() || false;
+            this.isAudioEnabled = this.webcam.isAudioEnabled() || false;
+        }
+    }
+
+    public toggleAutoRotation(): void {
+        if (this.webcam.isActive()) {
+            this.webcam.toggle('autoRotation');
+            this.isAutoRotationEnabled = this.webcam.isAutoRotationEnabled() || false;
         }
     }
 
@@ -280,5 +321,18 @@ export class WebcamComponent implements AfterViewInit {
             color: type,
         });
         await toast.present();
+    }
+
+    async showLoading(message: string) {
+        const loading = await this.loadingController.create({
+            message: message,
+            duration: 2000,
+            spinner: 'bubbles',
+        });
+        await loading.present();
+    }
+
+    async dismissLoading() {
+        await this.loadingController.dismiss();
     }
 }
