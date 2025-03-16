@@ -205,11 +205,6 @@
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Resolution
                                 </ion-label>
-                                <p
-                                    *ngIf="webcam.isAutoRotationEnabled()"
-                                    class="text-sm text-gray-700 dark:text-gray-300">
-                                    resolution key: {{ webcam.getCurrentResolution()?.key }}
-                                </p>
                                 <ion-select
                                     interface="popover"
                                     label-placement="stacked"
