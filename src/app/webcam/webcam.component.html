@@ -218,7 +218,7 @@
                                         *ngFor="let resolution of webcam.getResolutions()"
                                         [value]="resolution.key"
                                         class="text-gray-900 dark:text-white">
-                                        {{ resolution.key }}
+                                        {{resolution.name}} - {{ resolution.key }}
                                     </ion-select-option>
                                 </ion-select>
                             </div>
@@ -232,13 +232,44 @@
 
                                 <div class="space-y-2 mt-4">
                                     <!-- Allow Any Resolution -->
+
+                                    <div
+                                        class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                        <ion-label class="text-sm text-gray-700 dark:text-gray-300">
+                                            Is Mobile
+                                        </ion-label>
+                                        <ion-label class="text-sm text-gray-700 dark:text-gray-300">
+                                            {{ uaInfo.isMobile() ? 'Yes' : 'No' }}
+                                        </ion-label>
+                                    </div>
+
+                                    <div
+                                        class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                        <ion-label class="text-sm text-gray-700 dark:text-gray-300">
+                                            Is Tablet
+                                        </ion-label>
+                                        <ion-label class="text-sm text-gray-700 dark:text-gray-300">
+                                            {{ uaInfo.isTablet() ? 'Yes' : 'No' }}
+                                        </ion-label>
+                                    </div>
+
+                                    <div
+                                        class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                        <ion-label class="text-sm text-gray-700 dark:text-gray-300">
+                                            Is Desktop
+                                        </ion-label>
+                                        <ion-label class="text-sm text-gray-700 dark:text-gray-300">
+                                            {{ uaInfo.isDesktop() ? 'Yes' : 'No' }}
+                                        </ion-label>
+                                    </div>
+
                                     <div
                                         class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                         <ion-label class="text-sm text-gray-700 dark:text-gray-300">
                                             Allow Any Resolution
                                         </ion-label>
                                         <ion-toggle
-                                            [(ngModel)]="allowAnyResolution"
+                                            [(ngModel)]="isAllowAnyResolution"
                                             (ionChange)="toggleAllowAnyResolution()">
                                         </ion-toggle>
                                     </div>
@@ -250,8 +281,8 @@
                                             Auto Rotation
                                         </ion-label>
                                         <ion-toggle
-                                            [(ngModel)]="isAutoRotationEnabled"
-                                            (ionChange)="toggleAutoRotation()">
+                                            [(ngModel)]="isAllowSwapResolution"
+                                            (ionChange)="toggleAllowSwapResolution()">
                                         </ion-toggle>
                                     </div>
 
