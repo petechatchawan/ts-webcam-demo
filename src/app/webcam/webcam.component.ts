@@ -35,6 +35,10 @@ export class WebcamComponent implements AfterViewInit {
 
     async ngAfterViewInit(): Promise<void> {
         try {
+            // initialize the resolutions to use in ion-select and can reuse it
+            this.initializeResolutions();
+
+            // request camera permission
             await this.requestCameraPermission();
         } catch (error) {
             await this.showMessage('danger', 'Failed to initialize camera');
@@ -47,9 +51,6 @@ export class WebcamComponent implements AfterViewInit {
 
         switch (state) {
             case 'granted':
-                // initialize the resolutions to use in ion-select and can reuse it
-                this.initializeResolutions();
-
                 // check device capabilities
                 await this.checkDeviceCapabilities();
 
