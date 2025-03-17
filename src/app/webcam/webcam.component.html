@@ -25,7 +25,7 @@
 
                                 <!-- Loading Spinner -->
                                 <div
-                                    *ngIf="webcam.getWebcamStatus() === 'initializing'"
+                                    *ngIf="webcam.getStatus() === 'initializing'"
                                     class="absolute inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center">
                                     <ion-spinner
                                         name="circular"
@@ -187,7 +187,7 @@
                                     placeholder="Select Camera"
                                     [value]="selectedDevice"
                                     (ionChange)="setDevice($event.detail.value)"
-                                    [disabled]="webcam.getWebcamStatus() === 'initializing'"
+                                    [disabled]="webcam.getStatus() === 'initializing'"
                                     class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white">
                                     <ion-select-option
                                         *ngFor="let device of videoDevices; let i = index"
@@ -209,15 +209,15 @@
                                     label-placement="stacked"
                                     aria-label="resolution"
                                     placeholder="Select Resolution"
-                                    [value]="webcam.getCurrentResolution()?.key"
+                                    [value]="webcam.getCurrentResolution()?.id"
                                     (ionChange)="setResolution($event.detail.value)"
-                                    [disabled]="webcam.getWebcamStatus() === 'initializing'"
+                                    [disabled]="webcam.getStatus() === 'initializing'"
                                     class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white">
                                     <ion-select-option
-                                        *ngFor="let resolution of webcam.getResolutions()"
-                                        [value]="resolution.key"
+                                        *ngFor="let resolution of resolutions"
+                                        [value]="resolution.id"
                                         class="text-gray-900 dark:text-white">
-                                        {{resolution.name}} - {{ resolution.key }}
+                                        {{resolution.label}} - {{ resolution.id }}
                                     </ion-select-option>
                                 </ion-select>
                             </div>

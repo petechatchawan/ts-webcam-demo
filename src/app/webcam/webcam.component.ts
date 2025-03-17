@@ -5,7 +5,7 @@ import { AlertController, IonicModule, LoadingController, ToastController } from
 import { addIcons } from 'ionicons';
 import * as icons from 'ionicons/icons';
 import { UAInfo } from 'ua-info';
-import { Resolution, Webcam } from '../lib/ts-webcam';
+import { Resolution, Webcam } from 'ts-webcam';
 
 @Component({
     selector: 'app-webcam',
@@ -27,6 +27,32 @@ export class WebcamComponent implements AfterViewInit {
     public isAllowSwapResolution: boolean = false;
     public isAllowAnyResolution: boolean = false;
 
+    public resolutions: Resolution[] = [
+        // NORMAL RESOLUTIONS
+        this.webcam.createResolution('4K-Portrait', 2160, 4096),
+        this.webcam.createResolution('2K-Portrait', 1440, 2560),
+        this.webcam.createResolution('1080p-Portrait', 1080, 1920),
+        this.webcam.createResolution('720p-Portrait', 720, 1280),
+        this.webcam.createResolution('640p-Portrait', 480, 640),
+        this.webcam.createResolution('480p-Portrait', 360, 480),
+        this.webcam.createResolution('360p-Portrait', 240, 360),
+
+        this.webcam.createResolution('4K-Landscape', 4096, 2160),
+        this.webcam.createResolution('2K-Landscape', 2560, 1440),
+        this.webcam.createResolution('1080p-Landscape', 1920, 1080),
+        this.webcam.createResolution('720p-Landscape', 1280, 720),
+        this.webcam.createResolution('640p-Landscape', 640, 480),
+        this.webcam.createResolution('480p-Landscape', 480, 360),
+        this.webcam.createResolution('360p-Landscape', 360, 240),
+
+        // SQUARE RESOLUTIONS
+        this.webcam.createResolution('SQUARE-1920', 1920, 1920),
+        this.webcam.createResolution('SQUARE-1080', 1080, 1080),
+        this.webcam.createResolution('SQUARE-720', 720, 720),
+        this.webcam.createResolution('SQUARE-480', 480, 480),
+        this.webcam.createResolution('SQUARE-360', 360, 360),
+    ];
+
     constructor(
         private alertController: AlertController,
         private toastController: ToastController,
@@ -38,9 +64,6 @@ export class WebcamComponent implements AfterViewInit {
 
     async ngAfterViewInit(): Promise<void> {
         try {
-            // initialize the resolutions to use in ion-select and can reuse it
-            this.initializeResolutions();
-
             // request camera permission
             await this.requestCameraPermission();
         } catch (error) {
@@ -95,37 +118,6 @@ export class WebcamComponent implements AfterViewInit {
         await alert.present();
     }
 
-    initializeResolutions(): void {
-        const resolutions = [
-            // NORMAL RESOLUTIONS
-            this.webcam.createResolution('4K-Portrait', 2160, 4096),
-            this.webcam.createResolution('2K-Portrait', 1440, 2560),
-            this.webcam.createResolution('1080p-Portrait', 1080, 1920),
-            this.webcam.createResolution('720p-Portrait', 720, 1280),
-            this.webcam.createResolution('640p-Portrait', 480, 640),
-            this.webcam.createResolution('480p-Portrait', 360, 480),
-            this.webcam.createResolution('360p-Portrait', 240, 360),
-
-            this.webcam.createResolution('4K-Landscape', 4096, 2160),
-            this.webcam.createResolution('2K-Landscape', 2560, 1440),
-            this.webcam.createResolution('1080p-Landscape', 1920, 1080),
-            this.webcam.createResolution('720p-Landscape', 1280, 720),
-            this.webcam.createResolution('640p-Landscape', 640, 480),
-            this.webcam.createResolution('480p-Landscape', 480, 360),
-            this.webcam.createResolution('360p-Landscape', 360, 240),
-
-            // SQUARE RESOLUTIONS
-            this.webcam.createResolution('SQUARE-1920', 1920, 1920),
-            this.webcam.createResolution('SQUARE-1080', 1080, 1080),
-            this.webcam.createResolution('SQUARE-720', 720, 720),
-            this.webcam.createResolution('SQUARE-480', 480, 480),
-            this.webcam.createResolution('SQUARE-360', 360, 360),
-        ];
-
-        // set the resolutions
-        this.webcam.setResolutions(resolutions);
-    }
-
     private async initializeWebcam(): Promise<void> {
         console.log('Initialize Webcam...');
         this.videoDevices = await this.webcam.getVideoDevices();
@@ -142,7 +134,7 @@ export class WebcamComponent implements AfterViewInit {
 
         // setup the webcam
         this.webcam.setupConfiguration({
-            audio: this.isAudioEnabled,
+            audioEnabled: this.isAudioEnabled,
             device: this.selectedDevice,
             mirrorEnabled: this.isMirrorEnabled,
             previewElement: this.previewElement.nativeElement,
@@ -151,7 +143,7 @@ export class WebcamComponent implements AfterViewInit {
                 this.webcam.createResolution('720p-Landscape', 1280, 720),
                 this.webcam.createResolution('480p-Landscape', 480, 360),
             ],
-            onStart: async () => await this.handleOnStart(),
+            onStartSuccess: async () => await this.handleOnStart(),
             onError: async (error: any) => this.handleOnError(error),
         });
 
@@ -172,10 +164,7 @@ export class WebcamComponent implements AfterViewInit {
             }
 
             // check supported resolutions
-            const result = this.webcam.checkSupportedResolutions(
-                capabilities,
-                this.webcam.getResolutions(),
-            );
+            const result = this.webcam.checkSupportedResolutions(capabilities, this.resolutions);
 
             result.resolutions.forEach((res: any) => {
                 console.log(
@@ -201,17 +190,17 @@ export class WebcamComponent implements AfterViewInit {
             this.selectedResolution = this.webcam.getCurrentResolution();
             await this.showMessage(
                 'success',
-                `Opened camera ${this.selectedDevice?.label} with resolution ${this.selectedResolution?.key} successfully`,
+                `Opened camera ${this.selectedDevice?.label} with resolution ${this.selectedResolution?.id} successfully`,
             );
 
             // update the allowAnyResolution and mirror
             const config = this.webcam.getConfiguration();
             console.log('config', config);
 
-            this.isAudioEnabled = config?.audio || false;
+            this.isAudioEnabled = config?.audioEnabled || false;
             this.isMirrorEnabled = config?.mirrorEnabled || false;
             this.isAllowAnyResolution = config?.allowAnyResolution || false;
-            this.isAllowSwapResolution = config?.allowSwapResolution || false;
+            this.isAllowSwapResolution = config?.allowResolutionSwap || false;
         } else {
             await this.showMessage('warning', 'Video not ready. Please wait...');
         }
@@ -279,8 +268,8 @@ export class WebcamComponent implements AfterViewInit {
         }
     }
 
-    public async setResolution(key: string): Promise<void> {
-        const selectedResolution = this.webcam.getResolutions().find((r) => r.key === key);
+    public async setResolution(id: string): Promise<void> {
+        const selectedResolution = this.resolutions.find((r) => r.id === id);
         if (selectedResolution) {
             this.webcam.clearError();
             this.webcam.updateResolution(selectedResolution);
@@ -292,7 +281,7 @@ export class WebcamComponent implements AfterViewInit {
     public toggleAllowAnyResolution(): void {
         if (this.webcam.isActive()) {
             this.webcam.toggle('allowAnyResolution');
-            this.isAllowAnyResolution = this.webcam.isAllowAnyResolution() || false;
+            this.isAllowAnyResolution = this.webcam.isAnyResolutionAllowed() || false;
         }
     }
 
@@ -305,15 +294,15 @@ export class WebcamComponent implements AfterViewInit {
 
     public toggleAudio(): void {
         if (this.webcam.isActive()) {
-            this.webcam.toggle('audio');
+            this.webcam.toggle('audioEnabled');
             this.isAudioEnabled = this.webcam.isAudioEnabled() || false;
         }
     }
 
     public toggleAllowSwapResolution(): void {
         if (this.webcam.isActive()) {
-            this.webcam.toggle('allowSwapResolution');
-            this.isAllowSwapResolution = this.webcam.isAllowSwapResolution() || false;
+            this.webcam.toggle('allowResolutionSwap');
+            this.isAllowSwapResolution = this.webcam.isResolutionSwapAllowed() || false;
         }
     }
 
