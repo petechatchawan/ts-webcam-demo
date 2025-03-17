@@ -210,6 +210,7 @@ export class Webcam {
         },
     };
 
+    // Event listeners
     private deviceChangeListener: (() => void) | null = null;
     private orientationChangeListener: (() => void) | null = null;
 
@@ -222,7 +223,7 @@ export class Webcam {
             mirrorEnabled: false,
             previewElement: undefined as unknown as HTMLVideoElement,
             allowAnyResolution: true,
-            allowSwapResolution: allowSwapResolution, // ตั้งค่าที่นี่
+            allowSwapResolution: allowSwapResolution,
             onStart: () => {},
             onError: () => {},
         };
@@ -232,10 +233,7 @@ export class Webcam {
         // Don't call getAvailableDevices in constructor
         // Create canvas element for image capture
         this.uaInfo.setUserAgent(navigator.userAgent);
-        console.log('UAInfo:', this.uaInfo);
         const canvas = document.createElement('canvas');
-        const allowSwapResolution = this.uaInfo.isMobile() || this.uaInfo.isTablet();
-        console.log('allowSwapResolution', allowSwapResolution);
         this.state = {
             status: WebcamStatus.IDLE,
             configuration: this.getDefaultConfiguration(),
@@ -262,11 +260,6 @@ export class Webcam {
                 microphone: 'prompt',
             },
         };
-
-        console.log(
-            'Final allowSwapResolution in state:',
-            this.state.configuration?.allowSwapResolution,
-        ); // ตรวจสอบค่าหลังการตั้งค่า
     }
 
     public getWebcamState(): WebcamState {
