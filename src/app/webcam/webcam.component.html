@@ -185,7 +185,7 @@
                                     [value]="selectedDevice"
                                     (ionChange)="setDevice($event.detail.value)"
                                     [disabled]="webcam.getStatus() === 'initializing'"
-                                    class="w-full rounded-lg text-gray-900 dark:text-white">
+                                    class="w-full rounded-lg text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700">
                                     <ion-select-option
                                         *ngFor="let device of videoDevices; let i = index"
                                         [value]="device"
@@ -209,7 +209,7 @@
                                     [value]="webcam.getCurrentResolution()?.id"
                                     (ionChange)="setResolution($event.detail.value)"
                                     [disabled]="webcam.getStatus() === 'initializing'"
-                                    class="w-full rounded-lg text-gray-900 dark:text-white">
+                                    class="w-full rounded-lg text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700">
                                     <ion-select-option
                                         *ngFor="let resolution of resolutions"
                                         [value]="resolution.id"
