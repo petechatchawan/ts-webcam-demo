@@ -29,21 +29,21 @@ export class WebcamComponent implements AfterViewInit {
 
     public resolutions: Resolution[] = [
         // NORMAL RESOLUTIONS
-        this.webcam.createResolution('4K-Portrait', 2160, 4096),
-        this.webcam.createResolution('2K-Portrait', 1440, 2560),
-        this.webcam.createResolution('1080p-Portrait', 1080, 1920),
-        this.webcam.createResolution('720p-Portrait', 720, 1280),
-        this.webcam.createResolution('640p-Portrait', 480, 640),
-        this.webcam.createResolution('480p-Portrait', 360, 480),
-        this.webcam.createResolution('360p-Portrait', 240, 360),
+        this.webcam.createResolution('4K-PORTRAIT', 2160, 4096),
+        this.webcam.createResolution('2K-PORTRAIT', 1440, 2560),
+        this.webcam.createResolution('1080P-PORTRAIT', 1080, 1920),
+        this.webcam.createResolution('720P-PORTRAIT', 720, 1280),
+        this.webcam.createResolution('640P-PORTRAIT', 480, 640),
+        this.webcam.createResolution('480P-PORTRAIT', 360, 480),
+        this.webcam.createResolution('360P-PORTRAIT', 240, 360),
 
-        this.webcam.createResolution('4K-Landscape', 4096, 2160),
-        this.webcam.createResolution('2K-Landscape', 2560, 1440),
-        this.webcam.createResolution('1080p-Landscape', 1920, 1080),
-        this.webcam.createResolution('720p-Landscape', 1280, 720),
-        this.webcam.createResolution('640p-Landscape', 640, 480),
-        this.webcam.createResolution('480p-Landscape', 480, 360),
-        this.webcam.createResolution('360p-Landscape', 360, 240),
+        this.webcam.createResolution('4K-LANDSCAPE', 4096, 2160),
+        this.webcam.createResolution('2K-LANDSCAPE', 2560, 1440),
+        this.webcam.createResolution('1080P-LANDSCAPE', 1920, 1080),
+        this.webcam.createResolution('720P-LANDSCAPE', 1280, 720),
+        this.webcam.createResolution('640P-LANDSCAPE', 640, 480),
+        this.webcam.createResolution('480P-LANDSCAPE', 480, 360),
+        this.webcam.createResolution('360P-LANDSCAPE', 360, 240),
 
         // SQUARE RESOLUTIONS
         this.webcam.createResolution('SQUARE-1920', 1920, 1920),
