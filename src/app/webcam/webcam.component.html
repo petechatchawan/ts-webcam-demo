@@ -5,7 +5,7 @@
         </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding bg-gray-100 dark:bg-gray-900" [scrollY]="true">
+    <ion-content class="ion-padding" [scrollY]="true">
         <!-- Main Content -->
         <div class="container mx-auto max-w-7xl">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -13,7 +13,7 @@
                 <div class="lg:col-span-2">
                     <ng-container *ngIf="!webcam.needsPermissionRequest(); else permissionRequest">
                         <ion-card
-                            class="m-0 overflow-hidden shadow-lg bg-white dark:bg-gray-800 rounded-xl h-auto border dark:border-gray-700">
+                            class="m-0 overflow-hidden shadow-lg rounded-xl h-auto border dark:border-gray-700">
                             <!-- Camera Preview -->
                             <div class="relative aspect-video bg-black rounded-t-xl">
                                 <video
@@ -51,8 +51,7 @@
                             </div>
 
                             <!-- Camera Controls -->
-                            <div
-                                class="px-4 py-2 bg-white dark:bg-gray-800 border-t dark:border-gray-700">
+                            <div class="px-4 py-2 border-t dark:border-gray-700">
                                 <div class="flex flex-wrap items-center gap-2">
                                     <!-- Camera Status -->
                                     <ion-badge
@@ -91,8 +90,7 @@
                                 </div>
                             </div>
 
-                            <div
-                                class="flex flex-wrap justify-center gap-4 p-4 bg-white dark:bg-gray-800">
+                            <div class="flex flex-wrap justify-center gap-4 p-4">
                                 <ion-button
                                     *ngIf="!webcam.isActive()"
                                     (click)="webcam.start()"
@@ -134,8 +132,7 @@
                     </ng-container>
 
                     <ng-template #permissionRequest>
-                        <ion-card
-                            class="m-0 shadow-lg bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700">
+                        <ion-card class="m-0 rounded-xl border dark:border-gray-700">
                             <div class="p-6 text-center">
                                 <ion-icon
                                     name="alert-circle"
@@ -162,7 +159,7 @@
                 <!-- Right Side: Settings -->
                 <div class="lg:col-span-1">
                     <ion-card
-                        class="m-0 shadow-lg bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700 lg:sticky lg:top-4">
+                        class="m-0 shadow-lg rounded-xl border dark:border-gray-700 lg:sticky lg:top-4">
                         <ion-card-header class="border-b border-gray-200 dark:border-gray-700">
                             <ion-card-title
                                 class="flex items-center gap-2 text-lg p-4 text-gray-900 dark:text-white">
@@ -188,7 +185,7 @@
                                     [value]="selectedDevice"
                                     (ionChange)="setDevice($event.detail.value)"
                                     [disabled]="webcam.getStatus() === 'initializing'"
-                                    class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white">
+                                    class="w-full rounded-lg text-gray-900 dark:text-white">
                                     <ion-select-option
                                         *ngFor="let device of videoDevices; let i = index"
                                         [value]="device"
@@ -212,7 +209,7 @@
                                     [value]="webcam.getCurrentResolution()?.id"
                                     (ionChange)="setResolution($event.detail.value)"
                                     [disabled]="webcam.getStatus() === 'initializing'"
-                                    class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white">
+                                    class="w-full rounded-lg text-gray-900 dark:text-white">
                                     <ion-select-option
                                         *ngFor="let resolution of resolutions"
                                         [value]="resolution.id"
@@ -223,13 +220,12 @@
                             </div>
 
                             <!-- Advanced Settings -->
-                            <div
-                                class="pt-4 space-y-4 border-t border-gray-200 dark:border-gray-700">
+                            <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
                                 <h4 class="text-sm font-medium text-gray-900 dark:text-white">
                                     Advanced Settings
                                 </h4>
 
-                                <div class="space-y-2 mt-4">
+                                <div class="mt-2">
                                     <!-- Allow Any Resolution -->
 
                                     <div
