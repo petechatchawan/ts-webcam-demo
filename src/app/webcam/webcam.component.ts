@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule, LoadingController, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import * as icons from 'ionicons/icons';
-import { UAInfo } from 'ua-info';
 import { Resolution, Webcam } from 'ts-webcam';
+import { UAInfo } from 'ua-info';
 
 @Component({
     selector: 'app-webcam',
@@ -139,10 +139,15 @@ export class WebcamComponent implements AfterViewInit {
             device: this.selectedDevice,
             mirrorEnabled: this.isMirrorEnabled,
             previewElement: this.previewElement.nativeElement,
+            allowAnyResolution: this.isAllowAnyResolution,
             resolution: [
-                this.webcam.createResolution('1080p-Landscape', 1920, 1080),
-                this.webcam.createResolution('720p-Landscape', 1280, 720),
-                this.webcam.createResolution('480p-Landscape', 480, 360),
+                this.webcam.createResolution('SQUARE-4K', 4096, 4096),
+                this.webcam.createResolution('SQUARE-2K', 2048, 2048),
+                this.webcam.createResolution('SQUARE-1920', 1920, 1920),
+                this.webcam.createResolution('SQUARE-1080', 1080, 1080),
+                this.webcam.createResolution('SQUARE-720', 720, 720),
+                this.webcam.createResolution('SQUARE-480', 480, 480),
+                this.webcam.createResolution('SQUARE-360', 360, 360),
             ],
             onStartSuccess: async () => await this.handleOnStart(),
             onError: async (error: any) => this.handleOnError(error),
