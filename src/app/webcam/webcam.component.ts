@@ -28,29 +28,30 @@ export class WebcamComponent implements AfterViewInit {
     public isAllowAnyResolution: boolean = false;
 
     public resolutions: Resolution[] = [
-        // NORMAL RESOLUTIONS
-        this.webcam.createResolution('4K-PORTRAIT', 2160, 4096),
-        this.webcam.createResolution('2K-PORTRAIT', 1440, 2560),
-        this.webcam.createResolution('1080P-PORTRAIT', 1080, 1920),
-        this.webcam.createResolution('720P-PORTRAIT', 720, 1280),
-        this.webcam.createResolution('640P-PORTRAIT', 480, 640),
-        this.webcam.createResolution('480P-PORTRAIT', 360, 480),
-        this.webcam.createResolution('360P-PORTRAIT', 240, 360),
+        // PORTRAIT RESOLUTIONS
+        this.webcam.createResolution('PORTRAIT-360P', 360, 640),
+        this.webcam.createResolution('PORTRAIT-480P', 480, 854),
+        this.webcam.createResolution('PORTRAIT-720P', 720, 1280),
+        this.webcam.createResolution('PORTRAIT-1080P', 1080, 1920),
+        this.webcam.createResolution('PORTRAIT-2K', 1440, 2560),
+        this.webcam.createResolution('PORTRAIT-4K', 2160, 3840),
 
-        this.webcam.createResolution('4K-LANDSCAPE', 4096, 2160),
-        this.webcam.createResolution('2K-LANDSCAPE', 2560, 1440),
-        this.webcam.createResolution('1080P-LANDSCAPE', 1920, 1080),
-        this.webcam.createResolution('720P-LANDSCAPE', 1280, 720),
-        this.webcam.createResolution('640P-LANDSCAPE', 640, 480),
-        this.webcam.createResolution('480P-LANDSCAPE', 480, 360),
-        this.webcam.createResolution('360P-LANDSCAPE', 360, 240),
+        // LANDSCAPE RESOLUTIONS
+        this.webcam.createResolution('LANDSCAPE-360P', 640, 360),
+        this.webcam.createResolution('LANDSCAPE-480P', 854, 480),
+        this.webcam.createResolution('LANDSCAPE-720P', 1280, 720),
+        this.webcam.createResolution('LANDSCAPE-1080P', 1920, 1080),
+        this.webcam.createResolution('LANDSCAPE-2K', 2560, 1440),
+        this.webcam.createResolution('LANDSCAPE-4K', 3840, 2160),
 
         // SQUARE RESOLUTIONS
-        this.webcam.createResolution('SQUARE-1920', 1920, 1920),
-        this.webcam.createResolution('SQUARE-1080', 1080, 1080),
-        this.webcam.createResolution('SQUARE-720', 720, 720),
-        this.webcam.createResolution('SQUARE-480', 480, 480),
         this.webcam.createResolution('SQUARE-360', 360, 360),
+        this.webcam.createResolution('SQUARE-480', 480, 480),
+        this.webcam.createResolution('SQUARE-720', 720, 720),
+        this.webcam.createResolution('SQUARE-1080', 1080, 1080),
+        this.webcam.createResolution('SQUARE-1920', 1920, 1920),
+        this.webcam.createResolution('SQUARE-2K', 2048, 2048),
+        this.webcam.createResolution('SQUARE-4K', 4096, 4096),
     ];
 
     constructor(
